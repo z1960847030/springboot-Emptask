@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--configuration 核心配置文件-->
+<mapper namespace="com.zsx.springboot01.mapper.EmployeeMapper">
+    <insert id="addEmployee">
+        insert into employees(id, name, email, gender, department, birth)
+        values (#{id},#{name},#{email},#{gender},#{departmentName},#{birth})
+    </insert>
+
+    <update id="updateEmployee">
+        update employees
+        set id=#{id},name=#{name},email=#{email},gender=#{gender},
+            department=#{departmentName},
+            birth=#{birth}
+            where id = #{id};
+    </update>
+
+    <delete id="deleteEmployeeById">
+        delete from employees where id = #{id}
+    </delete>
+
+    <select id="queryAllEmployee" resultMap="EmpDep">
+        select *
+        from employees emp,department dep
+    </select>
+
+    <resultMap id="EmpDep" type="com.zsx.springboot01.pojo.Employee">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="gender" column="gender"/>
+        <result property="birth" column="birth"/>
+        <result property="departmentName" column="department"/>
+        <association property="department" javaType="com.zsx.springboot01.pojo.Department">
+            <result column="departmentId" property="departmentId"/>
+            <result column="departmentName" property="departmentName"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAllByDepartment" resultType="com.zsx.springboot01.pojo.Department">
+        select * from department
+    </select>
+    <select id="queryEmployeeById" resultType="com.zsx.springboot01.pojo.Employee">
+        select * from employees where id = #{id}
+    </select>
+</mapper>
